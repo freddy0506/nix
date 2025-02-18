@@ -33,6 +33,14 @@
   
   boot.supportedFilesystems = [ "ntfs" ];
 
+  # autoupgrade system from github
+  # curently testing
+  system.autoUpgrade = {
+    enable = true;
+    dates = "1min";
+    flake = "github:freddy0506/nix";
+  };
+
   # enable mullvad-vpn
   # for some reason resolved is needed
   networking.nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
