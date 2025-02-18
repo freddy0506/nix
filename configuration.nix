@@ -235,6 +235,7 @@
     brgenml1lpr
     onlyoffice-desktopeditors
     sqlite
+    ripgrep
   ];
 
   # For fingerprint scanner
