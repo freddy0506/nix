@@ -31,15 +31,8 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
+  nix.settings.auto-optimise-store = true;
   boot.supportedFilesystems = [ "ntfs" ];
-
-  # autoupgrade system from github
-  # curently testing
-  system.autoUpgrade = {
-    enable = true;
-    dates = "minutely";
-    flake = "github:freddy0506/nix";
-  };
 
   # enable mullvad-vpn
   # for some reason resolved is needed
