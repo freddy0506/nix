@@ -37,7 +37,7 @@
   # curently testing
   system.autoUpgrade = {
     enable = true;
-    dates = "1min";
+    dates = "minutely";
     flake = "github:freddy0506/nix";
   };
 
