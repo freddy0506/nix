@@ -3,6 +3,7 @@
   programs.nixvim = {
     enable = true;
     colorschemes.catppuccin.enable = true;
+    defaultEditor = true;
 
     # trying to fix rust lsp error
     extraConfigLua = ''

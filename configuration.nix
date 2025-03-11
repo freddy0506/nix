@@ -20,13 +20,13 @@
       "steam-run"
       "spotify"
       "libsciter"
-      "brgenml1lpr"
     ];
 
     # Set alias for updating command
     programs.bash.shellAliases = {
       sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --use-remote-sudo";
-      open = "xdg-open";
+      open = "setsid xdg-open";
+      nano = "nvim";
     };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -96,13 +96,6 @@
   # Configure console keymap
   console.keyMap = "neoqwertz";
 
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs.gutenprint pkgs.brgenml1lpr pkgs.brgenml1cupswrapper ];
-  };
-
-
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -112,7 +105,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
@@ -120,7 +113,7 @@
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.freddy = {
@@ -176,7 +169,6 @@
   # Histowiki test
   # systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
   # systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/home/freddy/dev/dezoom/Olympusscans" ];
-  /*
   services.nginx = {
     enable = true;
     user = "freddy";
@@ -184,7 +176,7 @@
       basicAuth = { admin = "anatuser"; };
       root = "/home/freddy/dev/dezoom/Olympusscans";
     };
-  };*/
+  };
 
   # for emotionDeploy
   virtualisation.docker.enable = true;
@@ -204,7 +196,6 @@
     rnote
     keepassxc
     z-lua
-    okular
     spotify
     sl
     libqalculate
@@ -224,12 +215,15 @@
     wl-clipboard
     fzf
     reloc8
-    # for printer in the Anatomie
-    brgenml1lpr
     onlyoffice-desktopeditors
     sqlite
     ripgrep
   ];
+
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
 
   # For fingerprint scanner
   services.fprintd = {
