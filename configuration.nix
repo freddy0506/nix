@@ -20,14 +20,14 @@
       "steam-run"
       "spotify"
       "libsciter"
+      "vmware-workstation"
     ];
 
-    # Set alias for updating command
-    programs.bash.shellAliases = {
-      sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --use-remote-sudo";
-      open = "setsid xdg-open";
-      nano = "nvim";
-    };
+  # Set alias for updating command
+  programs.bash.shellAliases = {
+    sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --use-remote-sudo";
+    open = "setsid xdg-open";
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
@@ -36,6 +36,7 @@
 
   # enable mullvad-vpn
   # for some reason resolved is needed
+  /*
   networking.nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
   services.resolved = {
     enable = true;
@@ -44,7 +45,7 @@
     fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
     dnsovertls = "true";
   };
-  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.enable = true;*/
 
 
   # Bootloader.
@@ -105,12 +106,18 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    jack.enable = true;
+    #jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
+
+  # vm for topspin
+
+
+ virtualisation.virtualbox.host.enable = true;
+ users.extraGroups.vboxusers.members = [ "freddy" ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -119,13 +126,24 @@
   users.users.freddy = {
     isNormalUser = true;
     description = "freddy";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "audio" "networkmanager" "wheel" ];
     packages = with pkgs; [
     ];
   };
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  # for controller support (Xbox)
+  hardware.steam-hardware.enable = true;
+  programs.gamemode.enable = true;
+  services.blueman.enable = true;
+
+  # protonGE
+  environment.sessionVariables = {
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+      "\${HOME}/.steam/root/compatibilitytools.d";
+  };
 
   # Install Steam (Unfree)
   programs.steam = {
@@ -169,6 +187,7 @@
   # Histowiki test
   # systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
   # systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/home/freddy/dev/dezoom/Olympusscans" ];
+  /*
   services.nginx = {
     enable = true;
     user = "freddy";
@@ -176,7 +195,7 @@
       basicAuth = { admin = "anatuser"; };
       root = "/home/freddy/dev/dezoom/Olympusscans";
     };
-  };
+  };*/
 
   # for emotionDeploy
   virtualisation.docker.enable = true;
@@ -184,46 +203,47 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     fprintd # For fingerprint scanner
     prismlauncher
+
     signal-desktop
-    legcord
-    octaveFull
-    wget
-    git
     thunderbird
-    rnote
+
     keepassxc
     z-lua
     spotify
-    sl
-    libqalculate
-    ethersync
-    gnome-tweaks
-    networkmanager-openconnect
-    gnomeExtensions.auto-move-windows
-    typst
-    feh
+
     cargo
     rustup
     rustc
-    tmux
-    mpv
     python3
-    openjdk
-    wl-clipboard
-    fzf
-    reloc8
-    onlyoffice-desktopeditors
-    sqlite
-    ripgrep
-  ];
 
-  environment.variables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
+    mpv
+
+    vim
+    onlyoffice-desktopeditors
+    rnote
+    typst
+    sqlite
+    ethersync
+
+    fzf
+    wget
+    git
+    ripgrep
+    sl
+    libqalculate
+    tmux
+    reloc8
+    unzip
+    yt-dlp
+
+    networkmanager-openconnect
+    wl-clipboard # copy from vim
+
+    emotiondayAPI
+    gnomeExtensions.caffeine
+  ];
 
   # For fingerprint scanner
   services.fprintd = {
