@@ -5,6 +5,38 @@
     colorschemes.catppuccin.enable = true;
     defaultEditor = true;
 
+    globals.mapleader = " ";
+    keymaps = [
+      {
+        action = "<cmd>Neotree float<CR>";
+        key = "<leader> ";
+        options = {
+          desc = "Open Neotree as floating window";
+        };
+      }
+      {
+        action = "<cmd>Neotree left<CR>";
+        key = "<leader>s";
+        options = {
+          desc = "Open Neotree on the side";
+        };
+      }
+      {
+        action = "<cmd>FzfLua files<CR>";
+        key = "<leader>f";
+        options = {
+          desc = "Fuzzy find files";
+        };
+      }
+      {
+        action = "<cmd>FzfLua live_grep<CR>";
+        key = "<leader>/";
+        options = {
+          desc = "Fuzzy find words";
+        };
+      }
+    ];
+
     # trying to fix rust lsp error
     extraConfigLua = ''
       for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
@@ -24,10 +56,31 @@
       set tabstop=2
       set shiftwidth=2
       set expandtab
-
+      set relativenumber
       set path+=**
       '';
     plugins = {
+      web-devicons.enable = true;
+      fzf-lua.enable = true;
+      neo-tree = {
+        enable = true;
+        sources = [
+          "filesystem"
+          "buffers"
+          "git_status"
+          "document_symbols"
+        ];
+        window.mappings = {
+          "y" = "copy";
+          "<esc>" = "revert_preview";
+          "d" = "delete";
+          "m" = "move";
+          "r" = "rename";
+        };
+        extraOptions = {
+          popup_border_style = "rounded";
+        };
+      };
       cmp = {
         enable = true;
         settings.sources = [
@@ -76,23 +129,12 @@
             installCargo = false;
           };
 
-          # For Grammer checking
-          ltex = {
-            enable = true;
-            settings = {
-              enabled = [ "astro" "html" "latex" "markdown" "text" "tex" "gitcommit" ];
-              completionEnabled = true;
-              language = "en-US de-DE";
-            };
-          };
-
           pylsp.enable = true;
 
           # for typst autocomplete
           tinymist.enable = true;
 
           matlab_ls.enable = true;
-          vhdl_ls.enable = true;
           ts_ls.enable = true;
           superhtml.enable = true;
         };
