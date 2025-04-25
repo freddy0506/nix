@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
-
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -11,6 +10,7 @@
       ./nixvim.nix
     ];
 
+  nixpkgs.config.allowBroken = true;
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       # Add additional package names here
@@ -20,7 +20,6 @@
       "steam-run"
       "spotify"
       "libsciter"
-      "vmware-workstation"
     ];
 
   # Set alias for updating command
@@ -33,6 +32,8 @@
   
   nix.settings.auto-optimise-store = true;
   boot.supportedFilesystems = [ "ntfs" ];
+
+  fonts.packages = [] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
   # enable mullvad-vpn
   # for some reason resolved is needed
@@ -102,22 +103,15 @@
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
 
-  # vm for topspin
 
-
- virtualisation.virtualbox.host.enable = true;
- users.extraGroups.vboxusers.members = [ "freddy" ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -248,10 +242,11 @@
   # For fingerprint scanner
   services.fprintd = {
     enable = true;
+    /*
     tod = {
       enable = true;
       driver = pkgs.libfprint-2-tod1-vfs0090;
-    };
+    };*/
   };
 
 

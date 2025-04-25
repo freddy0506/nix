@@ -2,7 +2,8 @@
   description = "Freddy's system Flake";
 
   inputs = {
-    # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
     ethersync = {
       url = "github:ethersync/ethersync";
       inputs.nixpkgs.follows = "nixpkgs";
