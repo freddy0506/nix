@@ -20,13 +20,29 @@
       "steam-run"
       "spotify"
       "libsciter"
+      "teamviewer"
     ];
+  services.teamviewer.enable = true;
 
   # Set alias for updating command
-  programs.bash.shellAliases = {
-    sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --use-remote-sudo";
+  programs.fish.shellAliases = {
+    sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --sudo";
     open = "setsid xdg-open";
+    cat = "bat";
+    nix-shell = "nix-shell --run fish";
+    zq = "zoxide query";
   };
+
+  programs.fish.enable = true;
+  programs.bash = {
+      interactiveShellInit = ''
+        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+        then
+          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+        fi
+      '';
+    };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
@@ -52,6 +68,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.configurationLimit = 5;
 
   networking.hostName = "Thinkpad"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -86,13 +103,22 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+
+  programs.hyprland = {
+    # Install the packages from nixpkgs
+    enable = true;
+    # Whether to enable XWayland
+    xwayland.enable = true;
+  };
 
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "de";
-    variant = "neo_qwertz";
+  services.xserver = {
+    xkb = {
+      layout = "de";
+      variant = "neo_qwertz";
+    };
   };
 
   # Configure console keymap
@@ -119,10 +145,9 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.freddy = {
     isNormalUser = true;
+    shell = pkgs.fish;
     description = "freddy";
-    extraGroups = [ "audio" "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    ];
+    extraGroups = [ "audio" "networkmanager" "wheel" "wireshark" ];
   };
 
   # Install firefox.
@@ -192,13 +217,19 @@
   };*/
 
   # for emotionDeploy
-  virtualisation.docker.enable = true;
+  # virtualisation.docker.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  users.defaultUserShell = pkgs.fish;
+  programs.zoxide.enableBashIntegration = true;
+  programs.zoxide.enableFishIntegration = true;
   environment.systemPackages = with pkgs; [
     fprintd # For fingerprint scanner
+    bat
     prismlauncher
+    kitty
+    zathura
 
     signal-desktop
     thunderbird
@@ -211,6 +242,7 @@
     rustup
     rustc
     python3
+    gcc
 
     mpv
 
@@ -222,31 +254,49 @@
     ethersync
 
     fzf
+    zoxide
     wget
     git
+    bacon
+    du-dust
     ripgrep
+    rusty-man
+    wiki-tui
     sl
     libqalculate
     tmux
     reloc8
     unzip
     yt-dlp
+    ncspot
 
     networkmanager-openconnect
     wl-clipboard # copy from vim
 
-    emotiondayAPI
     gnomeExtensions.caffeine
+    gnomeExtensions.lockscreen-extension
+    gnome-tweaks
+    hyprpaper
+    hyprlock
+    waybar
+    swayidle
+    eww
+    alsa-utils
+    starship
   ];
 
   # For fingerprint scanner
   services.fprintd = {
     enable = true;
-    /*
-    tod = {
+    /*tod = {
       enable = true;
-      driver = pkgs.libfprint-2-tod1-vfs0090;
+      #driver = pkgs.libfprint-2-tod1-vfs0090;
     };*/
+  };
+
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark;
   };
 
 
@@ -276,5 +326,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }

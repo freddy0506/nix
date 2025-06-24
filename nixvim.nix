@@ -2,7 +2,8 @@
 {
   programs.nixvim = {
     enable = true;
-    colorschemes.catppuccin.enable = true;
+    #colorschemes.catppuccin.enable = true;
+    colorschemes.monokai-pro.enable = true;
     defaultEditor = true;
 
     globals.mapleader = " ";
@@ -22,46 +23,77 @@
         };
       }
       {
-        action = "<cmd>FzfLua files<CR>";
-        key = "<leader>f";
+        action = "<cmd>Telescope find_files<CR>";
+        key = "<leader>sf";
         options = {
           desc = "Fuzzy find files";
         };
       }
       {
-        action = "<cmd>FzfLua live_grep<CR>";
-        key = "<leader>/";
+        action = "<cmd>Telescope live_grep<CR>";
+        key = "<leader>sw";
+        options = {
+          desc = "Fuzzy find words";
+        };
+      }
+      {
+        action = "<cmd>Telescope keymaps<CR>";
+        key = "<leader>sk";
         options = {
           desc = "Fuzzy find words";
         };
       }
     ];
 
-    # trying to fix rust lsp error
-    extraConfigLua = ''
-      for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
-          local default_diagnostic_handler = vim.lsp.handlers[method]
-          vim.lsp.handlers[method] = function(err, result, context, config)
-              if err ~= nil and err.code == -32802 then
-                  return
-              end
-              return default_diagnostic_handler(err, result, context, config)
-          end
-      end 
-    '';
 
     extraConfigVim = ''
       set number
-      colorscheme catppuccin-macchiato
-      set tabstop=2
-      set shiftwidth=2
       set expandtab
+      set tabstop=4 softtabstop=4 shiftwidth=4
       set relativenumber
       set path+=**
       '';
     plugins = {
+      # fancy icons
       web-devicons.enable = true;
-      fzf-lua.enable = true;
+
+      # search files
+      telescope.enable = true;
+
+      # for snippets
+      luasnip.enable = true;
+      friendly-snippets.enable = true;
+
+      parinfer-rust.enable = true;
+
+      markdown-preview.enable = true;
+      which-key = {
+        enable = true;
+        settings.delay = 500;
+      };
+
+      treesitter = {
+        enable = true;
+    
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          bash
+          java
+          rust
+          json
+          lua
+          make
+          markdown
+          nix
+          regex
+          toml
+          vim
+          vimdoc
+          xml
+          yaml
+        ];
+      };
+
+      # file tree
       neo-tree = {
         enable = true;
         sources = [
@@ -76,17 +108,31 @@
           "d" = "delete";
           "m" = "move";
           "r" = "rename";
+          "o" = "system_open";
         };
         extraOptions = {
           popup_border_style = "rounded";
+          commands = {
+            system_open.__raw = ''
+              function(state)
+                local node = state.tree:get_node()
+                local path = node:get_id()
+                vim.fn.jobstart({ "xdg-open", path }, { detach = true })
+              end
+            '';
+          };
         };
       };
+
+      # lsps
       cmp = {
         enable = true;
+        luaConfig.pre = ''
+        local luasnip = require("luasnip")
+        '';
         settings.sources = [
           { name = "nvim_lsp"; }
           { name = "path"; }
-          { name = "buffer"; }
         ];
 
         # copy pasted mapping
@@ -118,35 +164,35 @@
         };
       };
 
+
       lsp = {
         enable = true;
         inlayHints = true;
 
         servers = {
+          # rust lsp
           rust_analyzer = {
             enable = true;
             installRustc = false;
             installCargo = false;
           };
 
+          # pyhton lsp
           pylsp.enable = true;
 
-          # for typst autocomplete
+          # typst lsp
           tinymist.enable = true;
 
-          matlab_ls.enable = true;
-          ts_ls.enable = true;
+          java_language_server.enable = true;
           superhtml.enable = true;
+          nixd.enable = true;
+          clangd.enable = true;
+          ts_ls.enable = true;
         };
       };
-      # Trying to get cmp to work
-      cmp-nvim-lsp.enable = true;
-      cmp-buffer.enable = true;
-      cmp-path.enable = true;
-      cmp-treesitter.enable = true;
-      plantuml-syntax.enable = true;
-      
     };
+
+    # ethersync to work together on certain documents
     extraPlugins = [ 
       (pkgs.vimUtils.buildVimPlugin {
         name = "ethersync";
