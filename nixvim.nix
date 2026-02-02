@@ -16,13 +16,6 @@
         };
       }
       {
-        action = "<cmd>Neotree left<CR>";
-        key = "<leader>s";
-        options = {
-          desc = "Open Neotree on the side";
-        };
-      }
-      {
         action = "<cmd>Telescope find_files<CR>";
         key = "<leader>sf";
         options = {
@@ -43,13 +36,20 @@
           desc = "Fuzzy find words";
         };
       }
+      {
+        action = "<cmd>noh<CR>";
+        key = "<esc><esc>";
+        options = {
+          desc = "Unmark search";
+        };
+      }
     ];
 
 
     extraConfigVim = ''
       set number
       set expandtab
-      set tabstop=4 softtabstop=4 shiftwidth=4
+      set tabstop=2 softtabstop=2 shiftwidth=2
       set relativenumber
       set path+=**
       '';
@@ -72,8 +72,13 @@
         settings.delay = 500;
       };
 
+      teamtype.enable = true;
+
       treesitter = {
         enable = true;
+        # settings.highlight.enable = true;
+        # settings.indent.enable = true;
+        # settings.incremental_selection.enable = true;
     
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
           bash
@@ -96,12 +101,7 @@
       # file tree
       neo-tree = {
         enable = true;
-        sources = [
-          "filesystem"
-          "buffers"
-          "git_status"
-          "document_symbols"
-        ];
+        /*
         window.mappings = {
           "y" = "copy";
           "<esc>" = "revert_preview";
@@ -109,17 +109,24 @@
           "m" = "move";
           "r" = "rename";
           "o" = "system_open";
-        };
-        extraOptions = {
+          };*/
+        settings = {
+          sources = [
+            "filesystem"
+              "buffers"
+              "git_status"
+              "document_symbols"
+          ];
+
           popup_border_style = "rounded";
           commands = {
             system_open.__raw = ''
               function(state)
-                local node = state.tree:get_node()
-                local path = node:get_id()
-                vim.fn.jobstart({ "xdg-open", path }, { detach = true })
+              local node = state.tree:get_node()
+              local path = node:get_id()
+              vim.fn.jobstart({ "xdg-open", path }, { detach = true })
               end
-            '';
+              '';
           };
         };
       };
@@ -144,23 +151,23 @@
           "<C-e>" = "cmp.mapping.abort()";
           "<C-b>" = "cmp.mapping.scroll_docs(-4)";
           "<C-f>" = "cmp.mapping.scroll_docs(4)";
-          "<C-Space>" = "cmp.mapping.complete()";
+          # "<C-Space>" = "cmp.mapping.complete()";
           "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
-          "<C-l>" = ''
-            cmp.mapping(function()
-              if luasnip.expand_or_locally_jumpable() then
-                luasnip.expand_or_jump()
-              end
-            end, { 'i', 's' })
-          '';
-          "<C-h>" = ''
-            cmp.mapping(function()
-              if luasnip.locally_jumpable(-1) then
-                luasnip.jump(-1)
-              end
-            end, { 'i', 's' })
-          '';
+          #    "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
+          # "<C-l>" = ''
+          #   cmp.mapping(function()
+          #     if luasnip.expand_or_locally_jumpable() then
+          #       luasnip.expand_or_jump()
+          #     end
+          #   end, { 'i', 's' })
+          # '';
+          # "<C-h>" = ''
+          #   cmp.mapping(function()
+          #     if luasnip.locally_jumpable(-1) then
+          #       luasnip.jump(-1)
+          #     end
+          #   end, { 'i', 's' })
+          # '';
         };
       };
 
@@ -191,18 +198,5 @@
         };
       };
     };
-
-    # ethersync to work together on certain documents
-    extraPlugins = [ 
-      (pkgs.vimUtils.buildVimPlugin {
-        name = "ethersync";
-        src = pkgs.fetchFromGitHub {
-            owner = "ethersync";
-            repo = "ethersync-vim";
-            rev = "42f3ae9cf6f58616232598dc076b93a8a41aea4e";
-            hash = "sha256-o+LMK8yTw/hHZmB1tnRTR6C086kLME5EzLpIN6n2MGE=";
-        };
-      })
-    ];
   };
 }

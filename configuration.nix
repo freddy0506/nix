@@ -4,13 +4,15 @@
 
 { config, pkgs, lib, ... }:
 {
+
+  # use newest kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./nixvim.nix
+      #./nixvim.nix
     ];
 
-  nixpkgs.config.allowBroken = true;
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       # Add additional package names here
@@ -19,20 +21,54 @@
       "steam-unwrapped"
       "steam-run"
       "spotify"
-      "libsciter"
-      "teamviewer"
+      "obsidian"
     ];
-  services.teamviewer.enable = true;
+
+  # create Swap file
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 32*1024; # 32 GB
+  }];
+
+  # Hibernation
+  boot.kernelParams = ["button.lid_init_state=open" "resume_offset=12339200" "mem_sleep_default=deep"];
+  boot.resumeDevice = "/dev/disk/by-uuid/e3d3f73a-879f-44e9-a066-c6fec6023e70";
+  powerManagement.enable = true;
+
+  services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
+
+  # Hibernate on power button pressed
+  services.logind.settings.Login.HandlePowerKey = "poweroff";
+  services.logind.settings.Login.HandlePowerKeyLongPress = "poweroff";
+
+  systemd.sleep.extraConfig = ''
+    #SuspendState=mem
+    #HibernateMode=shutdown
+    HibernateDelaySec=10m
+  '';
+
+  # disable litswitch as wakeup
+  systemd.services.deactivate-lidswitch = {
+    script = ''
+      echo LID > /proc/acpi/wakeup
+    '';
+    wantedBy = [ "multi-user.target" ];
+    before = [ "getty.target" ];
+  };
 
   # Set alias for updating command
-  programs.fish.shellAliases = {
+  programs.bash.shellAliases = {
     sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --sudo";
     open = "setsid xdg-open";
     cat = "bat";
-    nix-shell = "nix-shell --run fish";
     zq = "zoxide query";
+    zathf = pkgs.writeShellScript "openAndClose" ''
+      zathura --fork "$@"
+    '';
   };
 
+  programs.bash.enable = true;
+  /*
   programs.fish.enable = true;
   programs.bash = {
       interactiveShellInit = ''
@@ -43,32 +79,35 @@
         fi
       '';
     };
+   */
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
   nix.settings.auto-optimise-store = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  fonts.packages = [] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+  fonts.packages =  with pkgs; [ nerd-fonts.fira-code nerd-fonts.droid-sans-mono ]; #[] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);networking.nameserver
 
   # enable mullvad-vpn
   # for some reason resolved is needed
+  # [ ];
+  networking.nameservers = ["8.8.8.8" "8.8.4.4"];# [ "141.83.100.100" "141.83.99.99" "1.1.1.1" ];
   /*
-  networking.nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
-  services.resolved = {
-    enable = true;
-    dnssec = "true";
-    domains = [ "~." ];
-    fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
-    dnsovertls = "true";
-  };
-  services.mullvad-vpn.enable = true;*/
-
+  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.package = pkgs.mullvad-vpn;
+  */
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.configurationLimit = 5;
+  
+  # Garbage collector
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-generations +10";
+  };
 
   networking.hostName = "Thinkpad"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -78,7 +117,10 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    plugins = [ pkgs.networkmanager-openconnect ];
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -103,9 +145,10 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  # services.displayManager.gdm.enable = true;
+  # services.desktopManager.gnome.enable = true;
 
+  services.displayManager.ly.enable = true;
   programs.hyprland = {
     # Install the packages from nixpkgs
     enable = true;
@@ -125,19 +168,8 @@
   console.keyMap = "neoqwertz";
 
   # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
+  # services.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -145,9 +177,9 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.freddy = {
     isNormalUser = true;
-    shell = pkgs.fish;
+    shell = pkgs.bash;
     description = "freddy";
-    extraGroups = [ "audio" "networkmanager" "wheel" "wireshark" ];
+    extraGroups = [ "docker" "audio" "networkmanager" "wheel" "wireshark" ];
   };
 
   # Install firefox.
@@ -157,6 +189,7 @@
   hardware.steam-hardware.enable = true;
   programs.gamemode.enable = true;
   services.blueman.enable = true;
+  hardware.bluetooth.enable = true;
 
   # protonGE
   environment.sessionVariables = {
@@ -181,12 +214,13 @@
     dataDir = "/home/freddy";
     settings = {
       devices = {
-        "Phone" = { id = "4LB72HT-MPF4W45-OXB6SLS-WTFCUMK-ZPBVMYC-S56OZMS-BZPEQ4P-TQGQ5AP"; };
+        "Phone" = { id = "V6OAANU-VIJ44MM-D4DUAT5-HYU5FQO-4F6UKOQ-7OTVZYJ-I76GRAF-LMULVQI"; };
+        "Server" = { id = "5I4DE3X-NXSBTJY-TRTYCTR-32HZSEL-WTJASPC-P4Y2A4H-65LHRJA-YY5OHQ3"; };
       };
       folders = {
         "Passwords" = {
           path = "/home/freddy/Documents/.secret/";
-          devices = [ "Phone" ];
+          devices = [ "Phone" "Server" ];
         };
       };
       folders = {
@@ -217,19 +251,32 @@
   };*/
 
   # for emotionDeploy
-  # virtualisation.docker.enable = true;
+  /*
+  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };*/
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  users.defaultUserShell = pkgs.fish;
+  users.defaultUserShell = pkgs.bash;
   programs.zoxide.enableBashIntegration = true;
-  programs.zoxide.enableFishIntegration = true;
+  #programs.zoxide.enableFishIntegration = true;
   environment.systemPackages = with pkgs; [
+    #kdePackages.networkmanager-qt
+    obsidian
     fprintd # For fingerprint scanner
     bat
     prismlauncher
+    st
     kitty
     zathura
+    inkscape
+    loupe
+    organicmaps
+    kdePackages.dolphin
+    qbittorrent
 
     signal-desktop
     thunderbird
@@ -238,8 +285,9 @@
     z-lua
     spotify
 
+    grimblast
+
     cargo
-    rustup
     rustc
     python3
     gcc
@@ -248,57 +296,66 @@
 
     vim
     onlyoffice-desktopeditors
-    rnote
+    zed-editor
     typst
     sqlite
-    ethersync
+    teamtype
 
     fzf
     zoxide
     wget
     git
     bacon
-    du-dust
     ripgrep
     rusty-man
     wiki-tui
+    dragon-drop
     sl
+    jq
     libqalculate
     tmux
     reloc8
     unzip
     yt-dlp
-    ncspot
+    dua
 
     networkmanager-openconnect
+    openconnect_openssl
+    openconnect
+    gpclient
     wl-clipboard # copy from vim
+    wdisplays
+    brightnessctl
 
-    gnomeExtensions.caffeine
-    gnomeExtensions.lockscreen-extension
-    gnome-tweaks
+    #gnomeExtensions.caffeine
+    #gnomeExtensions.lockscreen-extension
+    #gnome-tweaks
     hyprpaper
     hyprlock
+    iio-hyprland
+    fuzzel
     waybar
     swayidle
     eww
     alsa-utils
+    pavucontrol
     starship
+    libimobiledevice
+    helix
+
+    (let pkgs2 = pkgs.extend (final: prev: {
+                              gtk4 = prev.gtk4.overrideAttrs (origAttrs: rec {
+                                  version = "4.21.4";
+                                  src = fetchurl {
+                                    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+                                    hash = "sha256-l9FXD+fekSyFiO85GxhZNm+bOJSlMqjytQnt28fyKIA=";
+                                  };
+                                  nativeBuildInputs = origAttrs.nativeBuildInputs ++ [ shared-mime-info ];
+                                  });
+                              });
+     in pkgs2.rnote
+    )
   ];
-
-  # For fingerprint scanner
-  services.fprintd = {
-    enable = true;
-    /*tod = {
-      enable = true;
-      #driver = pkgs.libfprint-2-tod1-vfs0090;
-    };*/
-  };
-
-  programs.wireshark = {
-    enable = true;
-    package = pkgs.wireshark;
-  };
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -311,7 +368,17 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  /*
+  services.openssh = {
+    enable = true;
+    ports = [ 5432 ];
+    settings = {
+      PasswordAuthentication = true;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      AllowUsers = [ "freddy" ];
+    };
+  };*/
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

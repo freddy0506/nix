@@ -3,11 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
-    ethersync = {
-      url = "github:ethersync/ethersync";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,7 +18,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixvim, ethersync, reloc8, emotionAPI, ...}@inputs: {
+  outputs = { self, nixpkgs, nixvim, reloc8, emotionAPI, ...}@inputs: {
     nixosConfigurations = {
       Thinkpad = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
@@ -33,7 +29,6 @@
 
           {
             nixpkgs.overlays = [
-              (final: prev: {inherit (ethersync.packages.${prev.stdenv.system}) ethersync;}) 
               (final: prev: {inherit (reloc8.packages.${prev.stdenv.system}) reloc8; })
               (final: prev: {inherit (emotionAPI.packages.${prev.stdenv.system}) emotiondayAPI; })
             ];
