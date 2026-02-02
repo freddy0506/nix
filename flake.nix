@@ -1,40 +1,33 @@
 {
-  description = "Freddy's system Flake";
+  description = "Freddy's flake for everything";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
+    # my own tooling to simplyfy downloads
     reloc8 = {
       url = "github:freddy0506/reloc8";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emotionAPI = {
-      url = "git+ssh://git@github.com/Hydra-Technologies/emotionAPI";
-      inputs.nixpkgs.follows = "nixpkgs";
+
+    # restructuring my flake
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
     };
   };
 
-  outputs = { self, nixpkgs, nixvim, reloc8, emotionAPI, ...}@inputs: {
-    nixosConfigurations = {
-      Thinkpad = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs;};
-        modules = [
-          ./configuration.nix
-
-          nixvim.nixosModules.nixvim
-
-          {
-            nixpkgs.overlays = [
-              (final: prev: {inherit (reloc8.packages.${prev.stdenv.system}) reloc8; })
-              (final: prev: {inherit (emotionAPI.packages.${prev.stdenv.system}) emotiondayAPI; })
-            ];
-          }
-        ];
-      };
+  outputs = { flake-parts, ...} @ inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      imports = [
+        ./modules/Thinkpad.nix
+        ./modules/helix.nix
+        ./modules/nixvim.nix
+        ./modules/desktopEnv.nix
+        ./modules/consoleEnv.nix
+        ./modules/syncthing.nix
+        ./modules/hardware.nix
+      ];
     };
-  };
 }
