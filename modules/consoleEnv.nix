@@ -31,6 +31,7 @@
       jq # to format json
       fzf # search for files in a fuzzy way
       dua # analyse disk file size
+      tree # to list deeper levels
       alsa-utils # for sound stuff (alsamixer)
       dragon-drop
       libqalculate # gives qalc to calculate stuff
