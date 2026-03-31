@@ -1,5 +1,9 @@
-{
+{inputs, ...}: {
   flake.nixosModules.nixvim = { pkgs, ... }: {
+    imports = [
+      inputs.nixvim.nixosModules.nixvim
+    ];
+
     programs.nixvim = {
       enable = true;
       #colorschemes.catppuccin.enable = true;
@@ -17,14 +21,14 @@
         }
         {
           action = "<cmd>Telescope find_files<CR>";
-          key = "<leader>sf";
+          key = "<leader>f";
           options = {
             desc = "Fuzzy find files";
           };
         }
         {
           action = "<cmd>Telescope live_grep<CR>";
-          key = "<leader>sw";
+          key = "<leader>/";
           options = {
             desc = "Fuzzy find words";
           };

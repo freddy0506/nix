@@ -1,11 +1,11 @@
 {
   flake.nixosModules.hardware = {pkgs, ...}: {
     
+    services.printing.enable = true;
     # use newest kernel
     boot.kernelPackages = pkgs.linuxPackages_latest;
     imports =
       [ # Include the results of the hardware scan.
-        ./hardware-configuration.nix
       ];
 
     # create Swap file
@@ -25,11 +25,10 @@
     services.logind.settings.Login.HandlePowerKey = "poweroff";
     services.logind.settings.Login.HandlePowerKeyLongPress = "poweroff";
 
-    systemd.sleep.extraConfig = ''
-      #SuspendState=mem
-      #HibernateMode=shutdown
+    /*
+    systemd.sleep.settings.Sleep = ''
       HibernateDelaySec=10m
-    '';
+    '';*/
 
     # disable litswitch as wakeup
     systemd.services.deactivate-lidswitch = {

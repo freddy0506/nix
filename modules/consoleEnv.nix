@@ -61,11 +61,15 @@
       # I dont have a editor that supports this :(
       teamtype # prev. ethersync (for typing together)
 
+      filen-cli # to sync files the better way
 
       # stuff that may be important
       vim # for extreme cases, so I dont have to use nano
       wl-clipboard # for better clipboard integration
       libimobiledevice # connect to apple devices
+
+      # AI (Sprinkels)
+      claude-code
     ];
   };
 }

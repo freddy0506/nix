@@ -15,19 +15,27 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
+
+    # restructuring my flake
+    teamtype-lsp = {
+      #url = "github:nonscalable/teamtype-lsp";
+      url = "/home/freddy/dev/teamtype-lsp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixvim = {
+      url = "github:nix-community/nixvim";
+    };
+
+    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
+    import-tree.url = "github:vic/import-tree";
   };
 
-  outputs = { flake-parts, ...} @ inputs:
+  outputs = { flake-parts, import-tree, ...} @ inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       imports = [
-        ./modules/Thinkpad.nix
-        ./modules/helix.nix
-        ./modules/nixvim.nix
-        ./modules/desktopEnv.nix
-        ./modules/consoleEnv.nix
-        ./modules/syncthing.nix
-        ./modules/hardware.nix
+        (import-tree ./modules)
       ];
     };
 }

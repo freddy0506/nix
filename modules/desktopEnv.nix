@@ -1,4 +1,4 @@
-{
+{self, ...}: {
   flake.nixosModules.desktopEnv = {pkgs, lib, ...}: {
     # Enable the X11 windowing system.
     services.xserver.enable = true;
@@ -16,6 +16,7 @@
         "steam-run"
         "spotify"
         "obsidian"
+        "claude-code"
       ];
 
     fonts.packages =  with pkgs; [ nerd-fonts.fira-code nerd-fonts.droid-sans-mono ]; 
@@ -64,6 +65,7 @@
       spotify # musik go bum-bum-bum
       thunderbird # email go swish
       signal-desktop # message go "hello" -> ****** -> "hello"
+      flare-signal
 
       mpv # movie go "Do I love him?" ---- 5 hours ----> "yes"
       loupe # picture go show
@@ -73,6 +75,8 @@
       grimblast # screen go blink -> picture
       zed-editor # file go exists (with text!)
       onlyoffice-desktopeditors # wordfile go exits
+
+      filen-desktop # sync homefolder to cloud
 
       organicmaps # maps go: McDonalds there 
       prismlauncher # minecraft go ■
@@ -87,6 +91,8 @@
       hyprpaper # Background go pretty
       iio-hyprland # screen go | =>  __
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
+
+      self.packages.${pkgs.stdenv.hostPlatform.system}.myNoctalia
     ];
   };
 }
