@@ -4,6 +4,7 @@
       # Create a mumble Server as a chat alternative
       services.murmur = {
         enable = true;
+        password = "Bildungsweg3004";
         openFirewall = true;
       };
   };
