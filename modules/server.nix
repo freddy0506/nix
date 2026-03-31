@@ -9,9 +9,9 @@
       };
   };
 
-  flake.nixosModules.serverHardware = {modulePath, pkgs, ...}: {
+  flake.nixosModules.serverHardware = {modulesPath, lib, ...}: {
     imports = [
-      (modulePath + "/profiles/qemu-guest.nix")
+      (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
     nix.settings = {
@@ -37,6 +37,9 @@
     boot.loader.grub.enable = true;
     boot.loader.grub.device = "/dev/sda";
     boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" "ext4" ];
+    boot.initrd.kernelModules = [ ];
+    boot.kernelModules = [ ];
+    boot.extraModulePackages = [ ];
 
     users.users = {
       root.hashedPassword = "!"; # Disable root login
@@ -62,6 +65,7 @@
 
     networking.firewall.allowedTCPPorts = [ 22 ];
 
+    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
     system.stateVersion = "25.11";
   };
 
