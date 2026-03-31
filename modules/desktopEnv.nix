@@ -92,6 +92,8 @@
       iio-hyprland # screen go | =>  __
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
 
+      # AI (Sprinkels)
+      claude-code
       self.packages.${pkgs.stdenv.hostPlatform.system}.myNoctalia
     ];
   };

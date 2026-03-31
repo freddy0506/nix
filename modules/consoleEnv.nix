@@ -68,8 +68,6 @@
       wl-clipboard # for better clipboard integration
       libimobiledevice # connect to apple devices
 
-      # AI (Sprinkels)
-      claude-code
     ];
   };
 }
