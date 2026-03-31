@@ -9,15 +9,16 @@
       };
   };
 
-  flake.nixosModules.serverHardware = {pkgs, ...}: {
+  flake.nixosModules.serverHardware = {modulePath, pkgs, ...}: {
+    imports = [
+      (modulePath + "/profiles/qemu-guest.nix")
+    ];
+
     nix.settings = {
       experimental-features = "nix-command flakes";
     };
 
-    environment.systemPackages = [
-      pkgs.vim
-      pkgs.git
-    ];
+    
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
@@ -27,15 +28,11 @@
       device = "/dev/disk/by-label/boot";
       fsType = "ext4";
     };
-    swapDevices = [
-      {
-        device = "/dev/disk/by-label/swap";
-      }
-    ];
 
-    time.timeZone = "Europe/London";
+    time.timeZone = "Europe/Berlin";
     i18n.defaultLocale = "en_US.UTF-8";
-    console.keyMap = "us";
+    console.keyMap = "neoqwertz";
+
 
     boot.loader.grub.enable = true;
     boot.loader.grub.device = "/dev/sda";
