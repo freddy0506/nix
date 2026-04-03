@@ -83,6 +83,7 @@
 
       reloc8 # Download go in right folder
 
+      mumble
       # for hyperland to work
       eww # PC go pretty (powerbar and workspaces)
       fuzzel # app go open
@@ -93,7 +94,8 @@
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
 
       # AI (Sprinkels)
-      claude-code
+      # claude-code
+
       self.packages.${pkgs.stdenv.hostPlatform.system}.myNoctalia
     ];
   };

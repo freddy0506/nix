@@ -52,6 +52,8 @@
       };
     };
 
+    nix.settings.trusted-users = [ "freddy" ];
+
     security.sudo.wheelNeedsPassword = false;
 
     services.openssh = {

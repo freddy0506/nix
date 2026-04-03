@@ -11,6 +11,10 @@
       '';
     };
 
+    environment.variables = {
+      TERM="xterm-256color";
+    };
+
     programs.bash.enable = true;
 
     # may change to zsh

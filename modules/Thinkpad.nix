@@ -18,6 +18,12 @@
             (final: prev: {teamtype-lsp = inputs.teamtype-lsp.packages.${prev.stdenv.system}.default; })
           ];
         }
+
+        {
+          networking.hosts = {
+            "46.224.101.220" = [ "vps" ];
+          };
+        }
       ];
     };
   };
