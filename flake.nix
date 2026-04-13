@@ -3,7 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    nixpkgs-old.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+
+    pferdehofAPI.url = "/home/freddy/dev/Pferdehof/pferdehofAPI";
+    
+    pferdehofWeb = {
+      url =  "/home/freddy/dev/Pferdehof/PferdehofMachine";
+      inputs.nixpgks.follows = "nixpkgs";
+      inputs.pferdehofAPI.follows = "pferdehofAPI";
+    };
+
 
     # my own tooling to simplyfy downloads
     reloc8 = {

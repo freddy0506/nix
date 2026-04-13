@@ -1,4 +1,4 @@
-{
+{inputs, ...}: {
   flake.nixosModules.hardware = {pkgs, ...}: {
     
     services.printing.enable = true;
@@ -59,10 +59,9 @@
 
 
     networking.nameservers = ["8.8.8.8" "8.8.4.4"];# [ "141.83.100.100" "141.83.99.99" "1.1.1.1" ];
-    /*
+
     services.mullvad-vpn.enable = true;
     services.mullvad-vpn.package = pkgs.mullvad-vpn;
-    */
 
     # Bootloader.
     boot.loader.systemd-boot.enable = true;

@@ -1,4 +1,4 @@
-{self, ...}: {
+{self,inputs,  ...}: {
   flake.nixosModules.desktopEnv = {pkgs, lib, ...}: {
     # Enable the X11 windowing system.
     services.xserver.enable = true;
@@ -93,8 +93,10 @@
       iio-hyprland # screen go | =>  __
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
 
+      inputs.nixpkgs-old.legacyPackages.x86_64-linux.inlyne
+
       # AI (Sprinkels)
-      # claude-code
+      claude-code
 
       self.packages.${pkgs.stdenv.hostPlatform.system}.myNoctalia
     ];

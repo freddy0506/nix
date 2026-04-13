@@ -45,6 +45,7 @@
       # probably z-lua becaus it is infront in the list
       z-lua
       zoxide
+      kanshi
 
       # not helpfull tools
       sl # train go chuuut chuuuuuuut
@@ -71,6 +72,7 @@
       vim # for extreme cases, so I dont have to use nano
       wl-clipboard # for better clipboard integration
       libimobiledevice # connect to apple devices
+      swi-prolog
 
     ];
   };

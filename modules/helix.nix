@@ -25,6 +25,7 @@
       bash-language-server
       typescript-language-server
       teamtype-lsp
+      swi-prolog
     ];
   };
 }
