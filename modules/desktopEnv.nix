@@ -79,7 +79,6 @@
 
       mpv # movie go "Do I love him?" ---- 5 hours ----> "yes"
       loupe # picture go show
-      rnote # pen go /\/\/\/
       zathura # pdf go show
       inkscape # svg go sg
       grimblast # screen go blink -> picture
@@ -109,6 +108,20 @@
       claude-code
 
       self.packages.${pkgs.stdenv.hostPlatform.system}.myNoctalia
+
+      (let pkgs2 = pkgs.extend (final: prev: {
+          gtk4 = prev.gtk4.overrideAttrs (origAttrs: rec {
+        version = "4.21.4";
+        src = fetchurl {
+          url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+          hash = "sha256-l9FXD+fekSyFiO85GxhZNm+bOJSlMqjytQnt28fyKIA=";
+        };
+        nativeBuildInputs = origAttrs.nativeBuildInputs ++ [ shared-mime-info ];
+
+      });
+  });
+      in pkgs2.rnote
+      )
     ];
   };
 }
