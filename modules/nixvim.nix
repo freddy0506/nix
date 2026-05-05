@@ -8,7 +8,7 @@
       enable = true;
       #colorschemes.catppuccin.enable = true;
       colorschemes.monokai-pro.enable = true;
-      defaultEditor = true;
+      # defaultEditor = true;
 
       globals.mapleader = " ";
       keymaps = [

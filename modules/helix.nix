@@ -1,5 +1,6 @@
 {
   flake.nixosModules.helix = {pkgs, ...}: {
+    # set helix as default
     environment.variables.EDITOR = "hx";
 
     environment.systemPackages = with pkgs; [
