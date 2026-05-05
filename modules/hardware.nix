@@ -2,6 +2,15 @@
   flake.nixosModules.hardware = {pkgs, ...}: {
     
     services.printing.enable = true;
+    services.printing.drivers = [
+      pkgs.brlaser
+      pkgs.gutenprint
+      pkgs.foomatic-db-ppds
+    ];
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+    };
     # use newest kernel
     boot.kernelPackages = pkgs.linuxPackages_latest;
     imports =
