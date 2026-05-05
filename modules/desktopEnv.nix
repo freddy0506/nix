@@ -19,8 +19,17 @@
         "claude-code"
       ];
 
-    fonts.packages =  with pkgs; [ nerd-fonts.fira-code nerd-fonts.droid-sans-mono ]; 
+    fonts.enableDefaultPackages = true;
+    fonts.packages =  with pkgs; [
+      newcomputermodern
+      nerd-fonts.fira-code
+      nerd-fonts.droid-sans-mono
+      texlivePackages.libertine
+      libertine-g
+      inconsolata
+    ]; 
 
+    # my greeter
     services.displayManager.ly.enable = true;
     programs.hyprland = {
       # Install the packages from nixpkgs
