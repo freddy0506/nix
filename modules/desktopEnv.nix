@@ -93,6 +93,7 @@
 
       mpv # movie go "Do I love him?" ---- 5 hours ----> "yes"
       loupe # picture go show
+      pdfpc# Present pdfs
       zathura # pdf go show
       inkscape # svg go sg
       grimblast # screen go blink -> picture
