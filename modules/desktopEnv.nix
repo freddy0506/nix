@@ -92,6 +92,7 @@
       flare-signal
 
       mpv # movie go "Do I love him?" ---- 5 hours ----> "yes"
+      gimp# make pictures change
       loupe # picture go show
       pdfpc# Present pdfs
       zathura # pdf go show
