@@ -30,6 +30,7 @@
       wget
       unzip
       ripgrep # epic grep alternative (rg)
+      powertop # make laptop go ....................... (very long)
 
       # helpfull tools
       jq # to format json

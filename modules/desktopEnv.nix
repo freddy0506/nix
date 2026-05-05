@@ -28,6 +28,7 @@
       # Whether to enable XWayland
       xwayland.enable = true;
     };
+    services.power-profiles-daemon.enable = false; # needed because of conflict
 
     # Configure keymap in X11
     services.xserver = {
