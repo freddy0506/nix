@@ -77,7 +77,7 @@
 
     environment.systemPackages = with pkgs; [
       st # terminal that supports tmux
-      kitty # termial that does not support tmux
+      ghostty # termial that does not support tmux
       obsidian # not opensource note taking
       wdisplays # mutlidisplayeasymaker
       pavucontrol # Volume control
