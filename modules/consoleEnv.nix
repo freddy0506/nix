@@ -28,6 +28,7 @@
       git
       bat # cat with wings
       wget
+      delta # git diff but better
       unzip
       ripgrep # epic grep alternative (rg)
       powertop # make laptop go ....................... (very long)
