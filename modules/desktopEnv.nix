@@ -90,6 +90,7 @@
       thunderbird # email go swish
       signal-desktop # message go "hello" -> ****** -> "hello"
       flare-signal
+      mattermost-desktop
 
       mpv # movie go "Do I love him?" ---- 5 hours ----> "yes"
       gimp# make pictures change
