@@ -64,6 +64,7 @@
       cargo
       rustc
       bacon # keep rust compiled
+      cargo-tarpaulin
       rusty-man # manual for rust functions
 
       # I dont have a editor that supports this :(
