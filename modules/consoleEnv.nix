@@ -31,6 +31,7 @@
       unzip
       ripgrep # epic grep alternative (rg)
       powertop # make laptop go ....................... (very long)
+      pywalfox-native# make firefox go color
 
       # helpfull tools
       jq # to format json

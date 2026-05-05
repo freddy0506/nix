@@ -31,13 +31,27 @@
 
     # my greeter
     services.displayManager.ly.enable = true;
+
+    # my hyprland installation
+    # want to change because homophobic owners
+    /*
     programs.hyprland = {
       # Install the packages from nixpkgs
       enable = true;
       # Whether to enable XWayland
       xwayland.enable = true;
-    };
+    };*/
+
+    # install cosmic
+    # services.desktopManager.cosmic.enable = true;
+
     services.power-profiles-daemon.enable = false; # needed because of conflict
+
+    # install swayfx
+    programs.sway = {
+      enable = true;
+      package = pkgs.swayfx;
+    };
 
     # Configure keymap in X11
     services.xserver = {
@@ -97,9 +111,9 @@
       eww # PC go pretty (powerbar and workspaces)
       fuzzel # app go open
       swayidle # PC go Zzzzzz
-      hyprlock # PC go 🔒
-      hyprpaper # Background go pretty
-      iio-hyprland # screen go | =>  __
+      # hyprlock # PC go 🔒
+      # hyprpaper # Background go pretty
+      # iio-hyprland # screen go | =>  __
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
 
       inputs.nixpkgs-old.legacyPackages.x86_64-linux.inlyne
@@ -108,6 +122,9 @@
       claude-code
 
       self.packages.${pkgs.stdenv.hostPlatform.system}.myNoctalia
+
+      # to send notifications
+      libnotify
 
       (let pkgs2 = pkgs.extend (final: prev: {
           gtk4 = prev.gtk4.overrideAttrs (origAttrs: rec {
