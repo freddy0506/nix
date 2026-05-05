@@ -97,7 +97,7 @@
       inkscape # svg go sg
       grimblast # screen go blink -> picture
       zed-editor # file go exists (with text!)
-      onlyoffice-desktopeditors # wordfile go exits
+      libreoffice # wordfile go exits
 
       filen-desktop # sync homefolder to cloud
 
