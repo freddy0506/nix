@@ -16,13 +16,6 @@
       url = "github:hercules-ci/flake-parts";
     };
 
-    # restructuring my flake
-    teamtype-lsp = {
-      #url = "github:nonscalable/teamtype-lsp";
-      url = "/home/freddy/dev/teamtype-lsp";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";

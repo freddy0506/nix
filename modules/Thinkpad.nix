@@ -15,7 +15,6 @@
         {
           nixpkgs.overlays = [
             (final: prev: {inherit (inputs.reloc8.packages.${prev.stdenv.system}) reloc8; })
-            (final: prev: {teamtype-lsp = inputs.teamtype-lsp.packages.${prev.stdenv.system}.default; })
           ];
         }
 
