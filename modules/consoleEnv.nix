@@ -9,6 +9,9 @@
       zathf = pkgs.writeShellScript "openAndClose" ''
         zathura --fork "$@"
       '';
+      sif = pkgs.writeShellScript "openAndClose" ''
+        sioyek --new-window "$@"
+      '';
     };
 
     environment.variables = {

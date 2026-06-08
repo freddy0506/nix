@@ -97,6 +97,7 @@
       rnote # pen go /\/\/\
       pdfpc# Present pdfs
       zathura # pdf go show
+      sioyek # pdf go read
       inkscape # svg go sg
       grimblast # screen go blink -> picture
       zed-editor # file go exists (with text!)
