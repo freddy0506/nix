@@ -1,24 +1,25 @@
 {
   flake.nixosModules.consoleEnv = {pkgs, ...}: {
     # Set alias for updating command
-    programs.bash.shellAliases = {
-      sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --sudo";
-      open = "setsid xdg-open";
-      cat = "bat";
-      zq = "zoxide query";
-      zathf = pkgs.writeShellScript "openAndClose" ''
-        zathura --fork "$@"
-      '';
-      sif = pkgs.writeShellScript "openAndClose" ''
-        sioyek --new-window "$@"
-      '';
+    programs.bash = {
+      enable = true;
+      shellAliases = {
+        sysRebuild = "nixos-rebuild switch --flake ~/dev/sys/.# --sudo";
+        open = "setsid xdg-open";
+        cat = "bat";
+        zq = "zoxide query";
+        zathf = pkgs.writeShellScript "openAndClose" ''
+          zathura --fork "$@"
+        '';
+        sif = pkgs.writeShellScript "openAndClose" ''
+          sioyek --new-window "$@"
+        '';
+      };
     };
 
     environment.variables = {
       TERM="xterm-256color";
     };
-
-    programs.bash.enable = true;
 
     # may change to zsh
     users.defaultUserShell = pkgs.bash;
