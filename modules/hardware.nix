@@ -65,7 +65,7 @@
     services.logind.settings.Login.HandlePowerKeyLongPress = "poweroff";
 
     systemd.sleep.settings.Sleep = {
-      HibernateDelaySec = "10m";
+      HibernateDelaySec = "35m";
     };
 
     # disable litswitch as wakeup
