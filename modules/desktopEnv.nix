@@ -109,6 +109,7 @@
       prismlauncher # minecraft go ■
 
       reloc8 # Download go in right folder
+      inputs.dictui.packages.x86_64-linux.default
 
       mumble
       # for hyperland to work

@@ -11,6 +11,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # my own dictionary tool
+    dictui = {
+      url = "git+file:///home/freddy/dev/dictui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # restructuring my flake
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
