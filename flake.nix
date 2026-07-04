@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nixpkgs-old.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    # nixpkgs-old.url = "github:nixos/nixpkgs?ref=nixos-25.11";
 
     # my own tooling to simplyfy downloads
     reloc8 = {
