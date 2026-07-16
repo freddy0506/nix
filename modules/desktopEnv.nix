@@ -104,7 +104,7 @@
       zathura # pdf go show
       sioyek # pdf go read
       inkscape # svg go sg
-      grimblast # screen go blink -> picture
+      sway-contrib.grimshot # screen go blink -> picture
       zed-editor # file go exists (with text!)
       libreoffice # wordfile go exits
 
@@ -117,14 +117,11 @@
       inputs.dictui.packages.x86_64-linux.default
 
       mumble
-      # for hyperland to work
-      eww # PC go pretty (powerbar and workspaces)
       swayidle # PC go Zzzzzz
-      # hyprlock # PC go 🔒
-      # hyprpaper # Background go pretty
       albert
-      # iio-hyprland # screen go | =>  __
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
+      i3status
+      swaybg
 
       inputs.nixpkgs-old.legacyPackages.x86_64-linux.inlyne
 
