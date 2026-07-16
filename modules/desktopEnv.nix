@@ -20,6 +20,7 @@
         "steam-run"
         "spotify"
         "claude-code"
+        "albert"
       ];
 
     fonts.enableDefaultPackages = true;
@@ -118,10 +119,10 @@
       mumble
       # for hyperland to work
       eww # PC go pretty (powerbar and workspaces)
-      fuzzel # app go open
       swayidle # PC go Zzzzzz
       # hyprlock # PC go 🔒
       # hyprpaper # Background go pretty
+      albert
       # iio-hyprland # screen go | =>  __
       brightnessctl # brighness go AAAAAAHHHHH (with buttons!)
 
