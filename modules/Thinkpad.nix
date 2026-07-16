@@ -10,6 +10,7 @@
         consoleEnv
         desktopEnv
         syncthing
+        hibernation
         
         # overlay for reloc8
         {
