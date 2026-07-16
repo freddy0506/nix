@@ -82,7 +82,7 @@
     environment.systemPackages = with pkgs; [
       st # terminal that supports tmux
       ghostty # termial that does not support tmux
-      logseq # For note taking
+      # logseq # For note taking
       wdisplays # mutlidisplayeasymaker
       pavucontrol # Volume control
       kdePackages.dolphin # when you need a ui
