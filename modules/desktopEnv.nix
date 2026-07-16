@@ -114,7 +114,7 @@
       prismlauncher # minecraft go ■
 
       reloc8 # Download go in right folder
-      inputs.dictui.packages.x86_64-linux.default
+      # inputs.dictui.packages.x86_64-linux.default
 
       mumble
       swayidle # PC go Zzzzzz
