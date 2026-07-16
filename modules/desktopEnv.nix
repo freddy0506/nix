@@ -123,7 +123,7 @@
       i3status
       swaybg
 
-      inputs.nixpkgs-old.legacyPackages.x86_64-linux.inlyne
+      inlyne
 
       # AI (Sprinkels)
       claude-code
