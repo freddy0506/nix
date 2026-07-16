@@ -14,6 +14,7 @@
         sif = pkgs.writeShellScript "openAndClose" ''
           sioyek --new-window "$@"
         '';
+        ssh = "TERM=xterm-256color ssh";
       };
     };
 
