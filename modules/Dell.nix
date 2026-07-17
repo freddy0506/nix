@@ -15,6 +15,21 @@
           nixpkgs.overlays = [
             (final: prev: {inherit (inputs.reloc8.packages.${prev.stdenv.system}) reloc8; })
           ];
+
+          # ssh to copy data
+          services.openssh = {
+            enable = true;
+            openFirewall = true;
+            settings = {
+              PasswordAuthentication = false;
+              KbdInteractiveAuthentication = false;
+              PermitRootLogin = "no";
+              AllowUsers = [ "freddy" ];
+              MaxAuthTries = 3;
+              PerSourcePenalties = "crash:3600s authfail:3600s max:86400s";
+            };
+          };
+
         }
 
         {
